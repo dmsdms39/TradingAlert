@@ -2,7 +2,6 @@
 
 # branch
 
----
 
 - master, release, develop 3단계 전략 사용
     1. master
@@ -11,7 +10,7 @@
         - 릴리즈 가능 버전
             - QA 테스트
     3. develop
-        - 팀내 개발용
+        - 개발용
 
 ## branch tag
 
@@ -20,9 +19,6 @@
 - test
 
 # commit
-
----
-
 ## 단위
 
 - compile 성공 시에 commit 가능
@@ -79,38 +75,6 @@
 
     - 참고 자료
         - template 등록 방법: [https://velog.io/@ss-won/Git-GitLab-Issue-MR-Template-만들기](https://velog.io/@ss-won/Git-GitLab-Issue-MR-Template-%EB%A7%8C%EB%93%A4%EA%B8%B0)
-    - 예시
-
-        ```jsx
-        ### 작업 개요
-        <!--
-          ex) 고양이가 야옹 소리를 내도록 수정
-        -->
-        ### Jira
-        <!--
-          ex) BAEMIN-1004(이슈번호)
-        -->
-        ### 작업 분류
-        - [ ] 버그 수정
-        - [ ] 신규 기능
-        - [ ] 프로젝트 구조 변경
-        <!--
-          - [ ] 버그 수정
-          - [x] 신규 기능
-          - [ ] 프로젝트 구조 변경
-        -->
-        ### 작업 상세 내용
-        <!--
-          ex) 
-          1. 네 발 짐승 클래스에 `크앙` 함수 추가
-          2. 고양이 클래스에서 `크앙` 함수에 `미야아옹.wav` 재생시킴
-        -->
-        ### 생각해볼 문제
-        <!--
-          ex) 
-          1. wav 파일을 매번 입력하기 귀찮겠다.
-        -->
-        ```
 
 - assignee를 지정하여 MR 등록
 
@@ -120,37 +84,3 @@
     - 아래와 같이 체크하면 된다.
 
 
-# CI/CD
-
----
-
-- GitLab CI/CD 사용
-
-  [GitLab CI/CD 가이드](https://www.notion.so/GitLab-CI-CD-4155f927b61f461f992b49c4a43396d9?pvs=21)
-
-
-# 프로젝트 브랜치 관리 프로세스
-
-<aside>
-프로젝트 브랜치로 관리되는 studio, engine, auth 서버 MR 프로세스에 적용됩니다.
-
-</aside>
-
----
-
-1. checkout 후 작업) develop → feat
-2. MR 작성) 아래 **두 MR의 assignee는 같은 사람으로 지정**한다. (로컬 테스트는 당연히 필수!)
-    1. feat → develop
-    2. feat → army-regulation
-        1. WIP(Work In Progress, 해당 글자로 시작하는 MR은 머지가 불가능하다) 을 달아서 먼저 merge 되는 것을 방지한다.
-
-
-
-3. MR 피드백을 feat→ develop MR로 주고, MR 작성자는 이를 반영하여 다시 feat브랜치에 push한다.
-4. assignee는 feat → develop MR을 먼저 머지한다.
-5. 이후 feat → army-regulation MR을 머지한다.
-    1. 달아놓았던 WIP을 제거한다.
-    2. feat → army-regulation에 충돌이 있는 경우, MR 작성자가 local에서 충돌 해결 후 다시 push한다.
-    3. 머지한다.
-
-⚡ MR assignee는 MR 피드백을 feat→ develop MR로 주고, 이후에 feat → army-regulation MR을 머지하도록 한다. (머지 순서 보장!!)
