@@ -1,39 +1,43 @@
 package com.example.TradingAlert.Service;
+
+import com.example.TradingAlert.Dto.TradeResult;
 import com.example.TradingAlert.Dto.TradeStock;
+import com.example.TradingAlert.Repository.TradeResultRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TradeProcessorService {
+@RequiredArgsConstructor
+public class TradingService {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper ;
+    private final MatchingService matchingService;
+//    private final AlertService alertService;
+    private final TradeResultRepository tradeResultRepository;;
 
-    @RabbitListener(queues = "order_queue")
     public void processOrder(String message) {
         try {
             // JSON을 TradeStock 객체로 변환
             TradeStock order = objectMapper.readValue(message, TradeStock.class);
-            System.out.println(" [x] Received order: " + order);
+            System.out.println(" [processOrder] Received order: " + message);
 
-            // 현재 가격 조회
-            int currentPrice = TradeExecutionService.getCurrentPrice(order.getStockCode());
-            System.out.println(" [x] Current price of " + order.getStockCode() + ": " + currentPrice);
+            // 주문 체결 처리
+            TradeResult tradeResult = matchingService.matchOrder(order);
+            System.out.println(" [processOrder] Matched order: " + tradeResult);
 
-            // 주문 체결 여부 확인
-            if ((order.getAction().equals("BUY") && currentPrice <= order.getPrice()) ||
-                    (order.getAction().equals("SELL") && currentPrice >= order.getPrice())) {
-                System.out.println(" [x] Order executed: " + order);
-            } else {
-                System.out.println(" [x] Order not executed. Price condition not met.");
-            }
+            // 체결 결과 레디스 저장 & 알람 전송
+            tradeResultRepository.save(tradeResult);
+            System.out.println(" [processOrder] Saved order: " + tradeResult);
+//            alertService.sendTradeAlert(tradeResult);
 
-        } catch (Exception e) {
+        } catch (JsonProcessingException e) {
+            System.err.println("JSON 변환 오류: " + e.getMessage());
             e.printStackTrace();
         }
     }
 }
-
 //@rabbitmq 어노테이션 달아야할듯
 //public class OrderProcessorService {
 //

@@ -1,23 +1,31 @@
 package com.example.TradingAlert.Service;
 
-import com.example.TradingAlert.Repository.OrderExecutionRepository;
+import com.example.TradingAlert.Dto.TradeResult;
+import com.example.TradingAlert.Dto.TradeStock;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
 @Service
-public class TradeExecutionService {
+public class MatchingService {
 
-    private final OrderExecutionRepository orderExecutionRepository;
+    public TradeResult matchOrder(TradeStock order) {
+        //체결 후 redis 저장과 알람 작성할 예정
+        // 현재 가격 조회
+        int currentPrice = getCurrentPrice(order.getStockCode());
+        System.out.println(" [matchOrder] Current price of " + order.getStockCode() + ": " + currentPrice);
 
-    public TradeExecutionService(OrderExecutionRepository orderExecutionRepository) {
-        this.orderExecutionRepository = orderExecutionRepository;
-    }
+        // 주문 체결 여부 확인
+        boolean isMatched = (order.getAction().equals("BUY") && currentPrice <= order.getPrice()) ||
+                (order.getAction().equals("SELL") && currentPrice >= order.getPrice());
 
-    public int  tradeExecution(String stockCode) {
-        // 임의로 적어둔 것. 체결 후 redis 저장과 알람 작성할 예정
-        int orderNumber = orderExecutionRepository.hashCode();
-        return orderNumber;
+        if (isMatched) {
+            System.out.println(" [matchOrder Order executed: " + order);
+            return new TradeResult(order.getOrderId(), order.getStockCode(), order.getQuantity(), currentPrice, "MATCHED");
+        } else {
+            System.out.println(" [matchOrder] Order not executed. Price condition not met.");
+            return new TradeResult(order.getOrderId(), order.getStockCode(), order.getQuantity(), currentPrice, "PENDING");
+        }
     }
 
     public static int getCurrentPrice(String stockCode) {
