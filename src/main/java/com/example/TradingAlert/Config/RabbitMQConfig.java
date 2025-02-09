@@ -2,37 +2,54 @@ package com.example.TradingAlert.Config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
 
-    // 큐 이름 설정
-    private static final String QUEUE_NAME = "order_queue";
+    @Value("${spring.rabbitmq.host}")
+    private String rabbitHost;
+
+    @Value("${spring.rabbitmq.port}")
+    private int rabbitPort;
+
+    @Value("${spring.rabbitmq.username}")
+    private String rabbitUsername;
+
+    @Value("${spring.rabbitmq.password}")
+    private String rabbitPassword;
+
+    @Value("${spring.rabbitmq.queue.name}")
+    private String queueName;
+
+    @Bean
+    public ConnectionFactory connectionFactory() {
+        CachingConnectionFactory factory = new CachingConnectionFactory(rabbitHost, rabbitPort);
+        factory.setUsername(rabbitUsername);
+        factory.setPassword(rabbitPassword);
+        return factory;
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        return rabbitTemplate;
+    }
 
     @Bean
     public Queue orderQueue() {
-        return new Queue(QUEUE_NAME, false);
+        return new Queue(queueName, true);
     }
 
-    // RabbitMQ ConnectionFactory 설정
     @Bean
-    public CachingConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        // RabbitMQ 호스트 설정
-        connectionFactory.setHost("localhost");
-        connectionFactory.setPort(5672);
-        connectionFactory.setUsername("guest");
-        connectionFactory.setPassword("guest");
-        return connectionFactory;
-    }
-
-    // RabbitTemplate 설정
-    @Bean
-    public RabbitTemplate rabbitTemplate(CachingConnectionFactory connectionFactory) {
-        return new RabbitTemplate(connectionFactory);
+    public MessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
     }
 }
-
