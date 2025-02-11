@@ -3,7 +3,6 @@ package com.example.TradingAlert.Service;
 import com.example.TradingAlert.Dto.TradeResult;
 import com.example.TradingAlert.Dto.TradeStock;
 import com.example.TradingAlert.Repository.TradeResultRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,28 +13,18 @@ public class TradingService {
 
     private final ObjectMapper objectMapper ;
     private final MatchingService matchingService;
-//    private final AlertService alertService;
+    private final AlertService alertService;
     private final TradeResultRepository tradeResultRepository;;
 
-    public void processOrder(String message) {
-        try {
-            // JSON을 TradeStock 객체로 변환
-            TradeStock order = objectMapper.readValue(message, TradeStock.class);
-            System.out.println(" [processOrder] Received order: " + message);
+    public void processOrder(TradeStock order) {
+        // 주문 체결 처리
+        TradeResult tradeResult = matchingService.matchOrder(order);
+        System.out.println(" [processOrder] Matched order: " + tradeResult);
 
-            // 주문 체결 처리
-            TradeResult tradeResult = matchingService.matchOrder(order);
-            System.out.println(" [processOrder] Matched order: " + tradeResult);
-
-            // 체결 결과 레디스 저장 & 알람 전송
-            tradeResultRepository.save(tradeResult);
-            System.out.println(" [processOrder] Saved order: " + tradeResult);
-//            alertService.sendTradeAlert(tradeResult);
-
-        } catch (JsonProcessingException e) {
-            System.err.println("JSON 변환 오류: " + e.getMessage());
-            e.printStackTrace();
-        }
+        // 체결 결과 레디스 저장 & 알람 전송
+        tradeResultRepository.save(tradeResult);
+        System.out.println(" [processOrder] Saved order: " + tradeResult);
+        alertService.sendTradeAlert(tradeResult);
     }
 }
 //@rabbitmq 어노테이션 달아야할듯
@@ -52,15 +41,6 @@ public class TradingService {
 //
 //            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 //            System.out.println(" [*] Waiting for orders. To exit press CTRL+C");
-//
-//            //주문 처리 콜백 정의
-//            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-//                // JSON 메시지를 StockOrder 객체로 변환
-//                String json = new String(delivery.getBody(), "UTF-8");
-//                ObjectMapper objectMapper = new ObjectMapper();
-//                OrderStock order = objectMapper.readValue(json, OrderStock.class);
-//
-//                System.out.println(" [x] Received order: " + order);
 //
 //                // 현재 가격 조회
 //                int currentPrice = 0;

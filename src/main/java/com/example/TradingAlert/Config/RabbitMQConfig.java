@@ -25,8 +25,11 @@ public class RabbitMQConfig {
     @Value("${spring.rabbitmq.password}")
     private String rabbitPassword;
 
-    @Value("${spring.rabbitmq.queue.name}")
-    private String queueName;
+    @Value("${spring.rabbitmq.queue.order}")
+    private String orderQueue;
+
+    @Value("${spring.rabbitmq.queue.alert}")
+    private String alertQueue;
 
     @Bean
     public ConnectionFactory connectionFactory() {
@@ -45,7 +48,12 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue orderQueue() {
-        return new Queue(queueName, true);
+        return new Queue(orderQueue, true);
+    }
+
+    @Bean
+    public Queue alertQueue() {
+        return new Queue(alertQueue, true);
     }
 
     @Bean
