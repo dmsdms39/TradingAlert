@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 class RabbitMQListener {
 
-    private final TradingService  tradingService;
+    private final MatchingService  matchingService;
 
     @RabbitListener(queues = "order_queue")
     public void receiveMessage(TradeStock message) {
         System.out.println(" [RabbitMQListener] Received message: " + message);
-        tradingService.processOrder(message);
+        matchingService.matchOrder(message);
     }
 }
