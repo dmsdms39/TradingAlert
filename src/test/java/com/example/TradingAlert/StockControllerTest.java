@@ -53,7 +53,7 @@ public class StockControllerTest {
 
     @Test
     public void sendOrder_ShouldReturnSuccessResponse() throws Exception {
-        OrderRequest request = new OrderRequest( "005930", 100, 15000, "BUY");
+        OrderRequest request = new OrderRequest( "005930", "eun", 100, 15000, "BUY");
 
         mockMvc.perform(post("/trading/order")
                         .contentType(MediaType.APPLICATION_JSON)
