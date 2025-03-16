@@ -37,4 +37,4 @@ out/
 .vscode/
 
 #### fcm ###
-*.json
+src/main/resources/serviceAccountKey.json
