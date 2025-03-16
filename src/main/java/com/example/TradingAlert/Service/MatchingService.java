@@ -64,14 +64,13 @@ public class MatchingService {
             //tradeResult 생성
             TradeResult tradeResult = Optional.of(order)
                     .map( o -> o.getAction().equals("BUY") ?
-                            new TradeResult(o.getOrderId(), refStock.getOrderId(),
-                                    o.getStockCode(), refStock.getPrice()) :
-                            new TradeResult( refStock.getOrderId(), o.getOrderId(),
-                                    o.getStockCode(), -1 * refStock.getPrice()
-                            )).get();
+                            new TradeResult(o, refStock) :
+                            new TradeResult(refStock, o)
+                    ).get();
+            tradeResult.setExecutedPrice(Math.abs(refStock.getPrice()));
 
-            setCurrentPrice( new HashMap<>(
-                    Map.of(order.getStockCode(), refStock.getPrice())));
+            setCurrentPrice(new HashMap<>(
+                    Map.of(order.getStockCode(), Math.abs(refStock.getPrice()))));
 
             System.out.println(" [match executed: " + order + "]");
 
@@ -84,7 +83,7 @@ public class MatchingService {
                 return tradeResult;
 
             }  else {
-                // 전부 거래가 이루어 지는 경우, redStock은 남음
+                // 전부 거래가 이루어 지는 경우, refStock은 남음
                 tradeResult.setQuantity(order.getQuantity());
                 refStock.setQuantity(refStock.getQuantity() - order.getQuantity());
 

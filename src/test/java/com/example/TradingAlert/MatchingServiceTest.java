@@ -38,8 +38,8 @@ public class MatchingServiceTest {
 
     @BeforeEach
     void setUp() {
-        buyOrder = new TradeStock(1L, "005930", 100, -15000, "BUY"); // 매수 주문 (음수 가격)
-        sellOrder = new TradeStock(2L, "005930", 100, 15000, "SELL"); // 매도 주문 (양수 가격)
+        buyOrder = new TradeStock(1L, "eun", "005930", 100, -15000, "BUY"); // 매수 주문 (음수 가격)
+        sellOrder = new TradeStock(2L, "hee", "005930", 100, 15000, "SELL"); // 매도 주문 (양수 가격)
     }
 
     @Test

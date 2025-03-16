@@ -1,6 +1,7 @@
 package com.example.TradingAlert;
 
 import com.example.TradingAlert.Dto.TradeResult;
+import com.example.TradingAlert.Dto.TradeStock;
 import com.example.TradingAlert.Service.AlertService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,9 @@ public class AlertServiceTest {
 
     @Test
     void sendTradeAlert_ShouldSendMessageToQueue() {
-        TradeResult tradeResult = new TradeResult((long)11440031, (long)15152200, "005930", 15000);
+        TradeStock buyStock = new TradeStock();
+        TradeStock sellStock = new TradeStock();
+        TradeResult tradeResult = new TradeResult(buyStock, sellStock);
         alertService.sendTradeAlert(tradeResult);
 
         // RabbitMQ로 메시지가 전송 확인

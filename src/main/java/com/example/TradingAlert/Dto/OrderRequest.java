@@ -12,6 +12,8 @@ public class OrderRequest {
 
     @NotBlank
     private String stockCode;
+    @NotBlank
+    private String userId;
     @Min(1)
     private long quantity;
     @Min(1)
@@ -19,8 +21,9 @@ public class OrderRequest {
     @Pattern(regexp = "(BUY|SELL)$")
     private String  action;
 
-    public OrderRequest(String stockCode, long quantity, int price, String action) {
+    public OrderRequest(String stockCode, String userId, long quantity, int price, String action) {
         this.stockCode = stockCode;
+        this.userId = userId;
         this.quantity = quantity;
         this.price = price;
         this.action = action;

@@ -14,17 +14,18 @@ public class TradeResult {
 
     @Id
     private String executedId;
+    private String buyUserId;
+    private String sellUserId;
     private String stockCode;
     private long quantity;
     private int executedPrice;
     private String status;
 
-    public TradeResult (Long buyOrderId, Long sellOrderId, String stockCode, int executedPrice) {
-        this.executedId = buyOrderId+"_"+sellOrderId;
-        this.stockCode = stockCode;
-        this.quantity = 0;
-        this.executedPrice = executedPrice;
+    public TradeResult(TradeStock buyOrder, TradeStock sellOrder) {
+        this.executedId = buyOrder.getOrderId()+"_"+sellOrder.getOrderId();
+        this.buyUserId = buyOrder.getUserId();
+        this.sellUserId = sellOrder.getUserId();
+        this.stockCode = buyOrder.getStockCode();
         this.status = "MATCHED";
     }
-
 }
