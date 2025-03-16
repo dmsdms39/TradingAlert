@@ -1,11 +1,11 @@
 package com.example.TradingAlert.Repository;
 
-import com.example.TradingAlert.Dto.User;
+import com.example.TradingAlert.Dto.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, String> {
+public interface UserRepository extends JpaRepository<UserEntity, String> {
 
-    Optional<User> findUserById(String id);
+    Optional<UserEntity> findUserById(String id);
 }
