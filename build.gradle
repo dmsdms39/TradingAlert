@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.7'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'io.gatling.gradle' version '3.9.5'
 }
 
 group = 'com.example'
@@ -48,6 +49,9 @@ dependencies {
 	//FCM
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
 //	implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2'
+	//Gatling
+	testImplementation 'io.gatling.highcharts:gatling-charts-highcharts:3.9.3'
+	testImplementation 'io.gatling:gatling-test-framework:3.9.3'
 }
 
 tasks.named('test') {
