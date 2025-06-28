@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 5s  # 5초마다 데이터 수집
+  evaluation_interval: 5s # Evaluate rules every 5 seconds.
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets:
+          - "prometheus:9090"
+  - job_name: 'tradingAlert-app'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['host.docker.internal:8080']  # Spring Boot 서버의 주소
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['redis_exporter:9121']
