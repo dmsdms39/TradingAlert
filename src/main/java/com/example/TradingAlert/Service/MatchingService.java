@@ -78,8 +78,10 @@ public class MatchingService {
                 //order 원하는 수량 일부 거래가 이루어지는 경우
                 tradeResult.setQuantity(refStock.getQuantity());
                 order.setQuantity(order.getQuantity() - refStock.getQuantity());
+                refStock.setQuantity(0);
 
-                orderBookRepository.removeLowestPriceOrder(order.getStockCode(), oppositeAction);
+                orderDetailsRepository.save(refStock); //refStock quantity 수정
+                orderBookRepository.removeLowestPriceOrder(order.getStockCode(), oppositeAction);//lowest에서 제거
                 return tradeResult;
 
             }  else {

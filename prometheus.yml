@@ -10,6 +10,7 @@ scrape_configs:
   - job_name: 'tradingAlert-app'
     metrics_path: '/actuator/prometheus'
     static_configs:
+#      - targets: ['223.130.155.190:8080']  # NCP 주소
       - targets: ['host.docker.internal:8080']  # Spring Boot 서버의 주소
   - job_name: 'redis'
     static_configs:

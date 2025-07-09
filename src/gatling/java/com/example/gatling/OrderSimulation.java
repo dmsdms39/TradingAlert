@@ -21,15 +21,6 @@ public class OrderSimulation extends Simulation {
             .disableCaching()
             .shareConnections(); // 요청 헤더 설정
 
-    // 시나리오 정의
-//    private ScenarioBuilder scn = scenario("Order Load Test")
-//            .exec(http("Place Order")
-//                    .post("/trading/order")
-//                    .body(StringBody("{\"stockCode\": \"005930\", \"userId\" : \"hee\", \"quantity\" : 1, \"price\" : 50000, \"action\" : \"BUY\"}"))
-//                    .asJson()
-//                    .check(status().is(200))
-//            );
-
     // Feeder로 사용할 무한 Iterator
     Iterator<Map<String, Object>> randomOrderFeeder = new Iterator<>() {
         @Override
@@ -69,7 +60,6 @@ public class OrderSimulation extends Simulation {
                             .check(status().is(200))
             );
 
-    //서버 띄우고 warm up 테스트 전..  warm up 하고난 뒤.. (warm up)
     {
         setUp(
                 scn.injectOpen(
@@ -89,7 +79,7 @@ public class OrderSimulation extends Simulation {
     }
 
     private static String randomUserId() {
-        String[] users = {"hee", "eun"};
+        String[] users = {"hee", "eun", "kim", "cho"};
         return users[ThreadLocalRandom.current().nextInt(users.length)];
     }
 
