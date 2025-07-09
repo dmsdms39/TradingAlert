@@ -39,7 +39,7 @@
 
 ### 🧱 시스템 아키텍처
 
-<img width="1468" height="734" alt="Image" src="https://github.com/user-attachments/assets/66d94c54-4a92-41e2-90c7-af51f30f3ee7" />
+<img width="1546" height="955" alt="Image" src="https://github.com/user-attachments/assets/e53d2466-b629-443e-b73a-9ddcdff178c6" />
 
 ### 📜**시스템 설계도 역할**
 
@@ -75,7 +75,7 @@
 
 ### 🔁 주문 처리 흐름도
 
-<img width="1546" height="955" alt="Image" src="https://github.com/user-attachments/assets/e53d2466-b629-443e-b73a-9ddcdff178c6" />
+<img width="1468" height="734" alt="Image" src="https://github.com/user-attachments/assets/66d94c54-4a92-41e2-90c7-af51f30f3ee7" />
 
 ```
 [User] → 주문 요청
